@@ -1,0 +1,53 @@
+{
+  "Actions": [
+    {
+      "Icon": "pluginIcon",
+      "Name": "Toggle Buffer",
+      "States": [
+        {
+          "Image": "obsbuffer",
+          "Title": "Toggle\n\n\nReplay",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Toggle the replay buffer",
+      "UUID": "com.ntoff.obsbuffersocket.toggle"
+    },
+    {
+      "Icon": "pluginIcon",
+      "Name": "Save Buffer",
+      "States": [
+        {
+          "Image": "replaybuffersave",
+          "Title": "Save\n\n\nReplay",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Save the replay buffer",
+      "UUID": "com.ntoff.obsbuffersocket.save"
+    }
+  ],
+  "Author": "ntoff",
+  "CodePath": "index.html",
+  "PropertyInspectorPath": "settings.html",
+  "Description": "Control OBS studio's replay buffer the easy way, without keyboard shortcuts.",
+  "Name": "OBS Buffer Controls",
+  "Icon": "pluginIcon",
+  "URL": "https://github.com/ntoff",
+  "Version": "0.1",
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "ApplicationsToMonitor": {
+      "windows": [
+        "obs64.exe"
+      ]
+  }
+}
