@@ -1,7 +1,7 @@
 {
   "Actions": [
     {
-      "Icon": "pluginIcon",
+      "Icon": "toggleIcon",
       "Name": "Toggle Buffer",
       "States": [
         {
@@ -16,7 +16,7 @@
       "UUID": "com.ntoff.obsbuffersocket.toggle"
     },
     {
-      "Icon": "pluginIcon",
+      "Icon": "saveIcon",
       "Name": "Save Buffer",
       "States": [
         {
@@ -39,6 +39,8 @@
   "Icon": "pluginIcon",
   "URL": "https://github.com/ntoff",
   "Version": "0.1",
+  "Category": "OBS Replay Buffer",
+  "CategoryIcon": "categoryIcon",
   "OS": [
     {
       "Platform": "windows",
