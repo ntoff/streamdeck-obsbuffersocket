@@ -80,7 +80,10 @@ var saveBuffer = {
     cache: {},
     
     onSaveAppear: function (jsn) {
-        buttonHandler(jsn, "GetReplayBufferStatus");
+        if (!obsWebsocket) {
+            SDApi.send(jsn.context, 'showAlert', {});
+            return;
+        }
     },
     
     onSaveKeyUp: function (jsn) {
@@ -147,7 +150,8 @@ function buttonHandler(jsn, controlType) {
             console.log(JSON.parse(evt.data)); //spit out an error in the console
             return;
         }
-        else if (replayActive == true || replayActive == "ReplayStarted") {
+        
+        if (replayActive == true || replayActive == "ReplayStarted") {
             imageName = "obsbufferon"
         }
         else if (replayActive == false || replayActive == "ReplayStopped") {
