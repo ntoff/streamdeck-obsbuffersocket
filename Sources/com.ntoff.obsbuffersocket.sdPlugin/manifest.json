@@ -9,11 +9,17 @@
           "Title": "Toggle\n\n\nReplay",
           "TitleAlignment": "middle",
           "FontSize": "9"
+        },
+        {
+          "Image": "obsbufferon",
+          "Title": "Toggle\n\n\nReplay",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
         }
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Toggle the replay buffer",
-      "UUID": "com.ntoff.obsbuffersocket.toggle"
+      "UUID": "com.obsbuffersocket.toggle"
     },
     {
       "Icon": "saveIcon",
@@ -28,7 +34,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Save the replay buffer",
-      "UUID": "com.ntoff.obsbuffersocket.save"
+      "UUID": "com.obsbuffersocket.save"
     }
   ],
   "Author": "ntoff",
