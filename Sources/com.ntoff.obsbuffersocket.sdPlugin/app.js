@@ -9,7 +9,7 @@ Without this feature, when switching pages in this plugin, the replay buffer but
 
 Some of this code was lifted from the Elgato analog clock example.
 */
-var obsHost = "localhost"
+var obsHost = null,
     obsWebsocket = null,
     obsIsLaunched = 0,
     DestinationEnum = Object.freeze({
@@ -28,6 +28,7 @@ function connected (jsn) {
     $SD.on('applicationDidTerminate', jsonObj =>
         this.obsLaunched(jsonObj)
     );
+    
     //toggle buffer feature
     $SD.on('com.obsbuffersocket.toggle.willAppear', jsonObj =>
         toggleBuffer.onToggleAppear(jsonObj)
@@ -40,6 +41,9 @@ function connected (jsn) {
     );
     $SD.on('com.obsbuffersocket.toggle.willDisappear', jsonObj =>
         toggleBuffer.onWillDisappear(jsonObj)
+    );
+    $SD.on('com.obsbuffersocket.toggle.sendToPlugin', jsonObj =>
+        saveBuffer.onSendToPlugin(jsonObj)
     );
     //save buffer feature
     $SD.on('com.obsbuffersocket.save.willAppear', jsonObj =>
@@ -54,6 +58,9 @@ function connected (jsn) {
     $SD.on('com.obsbuffersocket.save.willDisappear', jsonObj =>
         saveBuffer.onWillDisappear(jsonObj)
     );
+    $SD.on('com.obsbuffersocket.save.sendToPlugin', jsonObj =>
+        saveBuffer.onSendToPlugin(jsonObj)
+    );
 }
 
 var toggleBuffer = {
@@ -63,6 +70,7 @@ var toggleBuffer = {
         return this.cache[ctx];
     },
     onToggleAppear: function (toggleJson) {
+        obsHost = toggleJson.payload.settings['obsHost'] || "localhost";
         if (!obsWebsocket) {
             SDApi.send(toggleJson.context, 'showAlert', {});
             return;
@@ -94,6 +102,7 @@ var toggleBuffer = {
             delete this.cache[toggleJson.context];
         }
     },
+    
 };
 
 var saveBuffer = {
@@ -103,6 +112,7 @@ var saveBuffer = {
         return this.cache[ctx];
     },
     onSaveAppear: function (saveJson) {
+        obsHost = saveJson.payload.settings['obsHost'] || "localhost:4444";
         if (!obsWebsocket) {
             SDApi.send(saveJson.context, 'showAlert', {});
             return;
@@ -110,6 +120,7 @@ var saveBuffer = {
     },
     onSaveKeyDown: function (saveJson) {
         if (obsIsLaunched) {
+            console.log("Will attempt to connect to ", obsHost);
             connectOBS();
         }
         else {
@@ -151,6 +162,25 @@ var saveBuffer = {
             delete this.cache[saveJson.context];
         }
     },
+    onSendToPlugin: function (saveJson) {
+        if (saveJson.payload.hasOwnProperty('DATAREQUEST')) {
+            $SD.api.sendToPropertyInspector(
+                saveJson.context,
+                { obs_host: obsHost },
+                this.type
+            );
+        } else if (saveJson.payload.hasOwnProperty('obs_host')) {
+            if (obsWebsocket){
+                disconnectOBS();
+            }
+            var _obsHost = saveJson.payload['obs_host'];
+            obsHost = _obsHost; //set the main variable too
+            $SD.api.setSettings(saveJson.context, {
+                context: saveJson.context,
+                obsHost: _obsHost
+            });
+        }
+    }
 };
 
 function getReplayStatus(toggleJson) {
@@ -213,7 +243,7 @@ function connectOBS() {
     //if there's no connection, create one
     if (!obsWebsocket){
         try{
-            obsWebsocket = new WebSocket("ws://"+obsHost+":4444");
+            obsWebsocket = new WebSocket("ws://"+obsHost);
         }
         catch(error){}
     }
@@ -232,9 +262,10 @@ function connectOBS() {
     };
 };
 
-//not currently used
 function disconnectOBS() {
+    obsWebsocket.close();
     obsWebsocket.onclose = function() { 
+        console.log("OBS connection closed");
         obsWebsocket = null; //nullify the socket if obs is closed
     };
 };

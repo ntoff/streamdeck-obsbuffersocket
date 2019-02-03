@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>OBS Buffer Control Property Page</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="sdpi.css">
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+        <div type="input" class="sdpi-item">
+            <div class="sdpi-item-label">Host:Port</div>
+            <input class="sdpi-item-value input obsHost" onchange="sendValueToPlugin(event.target.value, 'obs_host')">
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="app_pi.js"></script>
+</body>
+
+</html>
